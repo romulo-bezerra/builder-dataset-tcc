@@ -2,7 +2,7 @@ package br.edu.ifpb.builderdataset.abstraction;
 
 import java.io.File;
 
-public interface GitUtil {
+public interface GitService {
 
     File doClone();
 

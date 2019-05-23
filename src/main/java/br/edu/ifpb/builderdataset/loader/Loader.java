@@ -1,4 +1,4 @@
-package br.edu.ifpb.builderdataset.app;
+package br.edu.ifpb.builderdataset.loader;
 
 public class Loader {
 

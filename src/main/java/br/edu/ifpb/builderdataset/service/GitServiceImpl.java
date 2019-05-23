@@ -1,6 +1,6 @@
-package br.edu.ifpb.builderdataset.util;
+package br.edu.ifpb.builderdataset.service;
 
-import br.edu.ifpb.builderdataset.abstraction.GitUtil;
+import br.edu.ifpb.builderdataset.abstraction.GitService;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -10,14 +10,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class GitUtilImpl implements GitUtil {
+public class GitServiceImpl implements GitService {
 
-    private final Logger log = LoggerFactory.getLogger(GitUtilImpl.class);
+    private final Logger log = LoggerFactory.getLogger(GitServiceImpl.class);
     private final String user = "romulo-soares";
     private final String password = "catalega135";
     private String linkHttpRepo;
 
-    public GitUtilImpl(String linkHttpRepo){
+    public GitServiceImpl(String linkHttpRepo){
         this.linkHttpRepo = linkHttpRepo;
     }
 

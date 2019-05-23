@@ -3,7 +3,7 @@ package br.edu.ifpb.builderdataset.abstraction;
 import java.io.File;
 import java.util.List;
 
-public interface FileUtil {
+public interface FileService {
 
     File[] getFiles(File dir);
     String readContentFile(File file);

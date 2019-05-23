@@ -1,6 +1,6 @@
-package br.edu.ifpb.builderdataset.util;
+package br.edu.ifpb.builderdataset.service;
 
-import br.edu.ifpb.builderdataset.abstraction.FileUtil;
+import br.edu.ifpb.builderdataset.abstraction.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class FileUtilImpl implements FileUtil {
+public class FileServiceImpl implements FileService {
 
-    private final Logger log = LoggerFactory.getLogger(FileUtilImpl.class);
+    private final Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
     /**
      * Retorna uma array de arquivos de texto contidos no diretório

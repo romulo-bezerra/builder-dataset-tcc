@@ -1,8 +1,6 @@
 package br.edu.ifpb.builderdataset.service;
 
 import br.edu.ifpb.builderdataset.abstraction.ContentExtractorService;
-import br.edu.ifpb.builderdataset.util.FileUtilImpl;
-import br.edu.ifpb.builderdataset.util.GitUtilImpl;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,17 +8,17 @@ import java.util.List;
 
 public class ContentExtractorServiceImpl implements ContentExtractorService {
 
-    private GitUtilImpl gitUtil;
-    private final FileUtilImpl fileUtil;
+    private GitServiceImpl gitUtil;
+    private final FileServiceImpl fileUtil;
 
     public ContentExtractorServiceImpl() {
-        this.fileUtil = new FileUtilImpl();
+        this.fileUtil = new FileServiceImpl();
     }
 
     @Override
     public List<String> extractRows(String linkHttpRepo) {
 
-        this.gitUtil = new GitUtilImpl(linkHttpRepo);
+        this.gitUtil = new GitServiceImpl(linkHttpRepo);
 
         File clonedRepo = gitUtil.doClone();
 

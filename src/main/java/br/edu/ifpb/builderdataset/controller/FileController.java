@@ -1,16 +1,16 @@
 package br.edu.ifpb.builderdataset.controller;
 
-import br.edu.ifpb.builderdataset.abstraction.FileUtil;
-import br.edu.ifpb.builderdataset.util.FileUtilImpl;
+import br.edu.ifpb.builderdataset.abstraction.FileService;
+import br.edu.ifpb.builderdataset.service.FileServiceImpl;
 
 import java.io.File;
 import java.util.List;
 
-public class FileUtilController {
+public class FileController {
 
-    private FileUtil fileUtil;
+    private FileService fileUtil;
 
-    public FileUtilController(FileUtilImpl fileUtil) {
+    public FileController(FileServiceImpl fileUtil) {
         this.fileUtil = fileUtil;
     }
 
