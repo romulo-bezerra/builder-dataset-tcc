@@ -28,6 +28,7 @@ public class GitServiceImpl implements GitService {
      */
     @Override
     public File doClone() {
+
         CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(user, password);
 
         File file = new File("src/main/resources/temp-repositories");
@@ -40,8 +41,9 @@ public class GitServiceImpl implements GitService {
                     .call();
             return file;
         } catch (GitAPIException e) {
-            log.warn("\nNão foi possível clonar o repositório!\n" + e.getMessage());
+            log.warn("Não foi possível clonar o repositório!\n" + e.getMessage());
             return null;
         }
     }
+
 }
