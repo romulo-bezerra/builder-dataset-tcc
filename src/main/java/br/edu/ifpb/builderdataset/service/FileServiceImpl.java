@@ -1,8 +1,6 @@
 package br.edu.ifpb.builderdataset.service;
 
 import br.edu.ifpb.builderdataset.abstraction.FileService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -12,10 +10,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 public class FileServiceImpl implements FileService {
 
-    private final Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
+    private final java.util.logging.Logger log = Logger.getLogger(FileServiceImpl.class.getName());
 
     /**
      * Retorna uma array de arquivos de texto contidos no diretório
@@ -53,16 +52,19 @@ public class FileServiceImpl implements FileService {
     public String readContentFile(File file) {
         Path path = Paths.get(file.toURI());
         try {
-            String longText = formmaterString(Files.readAllLines(path).toString());
+//            String longText = formmaterString(Files.readAllLines(path).toString());
+            String longText = Files.readAllLines(path).toString();
             return longText;
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.warning(e.getMessage());
         }
         return null;
     }
 
     @Override
     public List<String> readContentFileAsList(File file){
+
+
         List<String> retorno = new ArrayList<>();
         String nameFile = file.getName();
 
@@ -79,24 +81,25 @@ public class FileServiceImpl implements FileService {
             String linha = "";
 
             try {
-                conteudoFile = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+                conteudoFile = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.ISO_8859_1));
                 while ((linha = conteudoFile.readLine()) != null) {
-                    retorno.add(formmaterString(linha));
+//                    retorno.add(formmaterString(linha));
+                    retorno.add(linha);
                 }
                 return retorno;
 
             } catch (FileNotFoundException e) {
-                log.error("Arquivo não encontrado: \n" + e.getMessage());
+                log.warning("Arquivo não encontrado: \n" + e.getMessage());
                 return retorno;
             } catch (IOException e) {
-                log.error("IO erro: \n" + e.getMessage());
+                log.warning("IO erro: \n" + e.getMessage());
                 return retorno;
             } finally {
                 if (conteudoFile != null){
                     try {
                         conteudoFile.close();
                     } catch (IOException e) {
-                        log.error("IO erro: \n" + e.getMessage());
+                        log.warning("IO erro: \n" + e.getMessage());
                     }
                 }
             }
@@ -104,19 +107,16 @@ public class FileServiceImpl implements FileService {
         return retorno;
     }
 
-    private String formmaterString(String s){
-        return s.replace(",", "")
-                .replace("[", "")
-                .replace("]", "")
-                .replace("\"", "")
-                .replace("  ", " ")
-                .replace("   ", " ")
-                .replace("    ", " ")
-                .replace("//", "")
-                .replace("{", "")
-                .replace("}", "")
-                .replace("#", "");
-    }
+//    private String formmaterString(String s){
+//        return s.replace(",", "")
+//                .replace("[", "")
+//                .replace("]", "")
+//                .replace("\"", "")
+//                .replace("  ", " ")
+//                .replace("   ", " ")
+//                .replace("    ", " ")
+//                .replace("//", "");
+//    }
 
     /**
      * Exclui o Diretório dado com todos seus sub-diretórios e arquivos:
@@ -139,6 +139,28 @@ public class FileServiceImpl implements FileService {
             }
         }
         dir.delete();
+    }
+
+    public void writeContentFile(File file, String text) {
+
+        BufferedWriter writer = null;
+
+        try {
+            //escrevendo no arquivo
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true)));
+            writer.write(text);
+            writer.newLine();
+        } catch (IOException e) {
+            log.warning("Erro: Não foi possível escrever no arquivo.\n" + e.getMessage());
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    log.warning("Erro: Não foi possivel fechar conexão com o arquivo.\n" + e.getMessage());
+                }
+            }
+        }
     }
 
 }

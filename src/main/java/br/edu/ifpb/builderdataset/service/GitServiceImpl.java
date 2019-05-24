@@ -5,19 +5,24 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 public class GitServiceImpl implements GitService {
 
-    private final Logger log = LoggerFactory.getLogger(GitServiceImpl.class);
+    private final Logger log = Logger.getLogger(GitServiceImpl.class.getName());
     private final String user = "romulo-soares";
     private final String password = "catalega135";
     private String linkHttpRepo;
 
     public GitServiceImpl(String linkHttpRepo){
+        this.linkHttpRepo = linkHttpRepo;
+    }
+
+    public GitServiceImpl() {}
+
+    public void setLinkHttpRepo(String linkHttpRepo) {
         this.linkHttpRepo = linkHttpRepo;
     }
 
@@ -41,7 +46,7 @@ public class GitServiceImpl implements GitService {
                     .call();
             return file;
         } catch (GitAPIException e) {
-            log.warn("Não foi possível clonar o repositório!\n" + e.getMessage());
+            log.warning("Erro ao clonar o repositório. Cheque a consistência do link do repositório!\n" + e.getMessage());
             return null;
         }
     }
