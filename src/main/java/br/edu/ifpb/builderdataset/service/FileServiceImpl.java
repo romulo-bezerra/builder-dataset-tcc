@@ -64,7 +64,6 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<String> readContentFileAsList(File file){
 
-
         List<String> retorno = new ArrayList<>();
         String nameFile = file.getName();
 
@@ -75,14 +74,16 @@ public class FileServiceImpl implements FileService {
                 && !nameFile.endsWith("exif") && !nameFile.endsWith("zip")
                 && !nameFile.endsWith("rar") && !nameFile.endsWith("tar")
                 && !nameFile.endsWith("z") && !nameFile.endsWith("taz")
-                && !nameFile.endsWith("tgz") && !nameFile.endsWith("arj")){
+                && !nameFile.endsWith("tgz") && !nameFile.endsWith("arj")
+                && !nameFile.endsWith("woff2") && !nameFile.endsWith("woff")) {
 
             BufferedReader conteudoFile = null;
             String linha = "";
 
             try {
-                conteudoFile = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.ISO_8859_1));
-                while ((linha = conteudoFile.readLine()) != null) {
+                conteudoFile = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+                final int qntMinCaracter = 5; //definida aleatorialmente, mas precisamente
+                while ((linha = conteudoFile.readLine()) != null && !"".equalsIgnoreCase(linha) && (linha.length() > qntMinCaracter)) {
 //                    retorno.add(formmaterString(linha));
                     retorno.add(linha);
                 }

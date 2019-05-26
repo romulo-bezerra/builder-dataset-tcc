@@ -7,14 +7,14 @@ import java.io.File;
 
 public class GitController {
 
-    private GitService gitUtil;
+    private GitService gitService;
 
-    public GitController(GitServiceImpl gitUtil) {
-        this.gitUtil = gitUtil;
+    public GitController() {
+        this.gitService = new GitServiceImpl();
     }
 
-    public File doClone() {
-        return this.gitUtil.doClone();
+    public File doClone(String linkHttpRepo) {
+        return this.gitService.doClone(linkHttpRepo);
     }
 
 }

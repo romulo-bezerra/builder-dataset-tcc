@@ -16,24 +16,29 @@ public class ContentExtractorServiceImpl implements ContentExtractorService {
     private final FileController fileController;
     private final java.util.logging.Logger log = Logger.getLogger(ContentExtractorServiceImpl.class.getName());
 
-    public ContentExtractorServiceImpl(GitController gitController, FileController fileController) {
-        this.gitController = gitController;
-        this.fileController = fileController;
+    public ContentExtractorServiceImpl() {
+        this.gitController = new GitController();
+        this.fileController = new FileController();
     }
 
     @Override
-    public List<String> extractRows() {
+    public List<String> extractRows(String linkHttpRepo) {
 
         log.log(Level.INFO, "Clonando repositório...");
 
-        File clonedRepo = gitController.doClone();
+        File clonedRepo = gitController.doClone(linkHttpRepo);
 
         log.log(Level.INFO, "Repositório clonado!");
 
         log.log(Level.INFO, "Escaneando arquivos e lendo linhas...");
 
         List<String> aggregateLines = new ArrayList<>();
+
         for (File scannedFile : fileController.getFiles(clonedRepo)){
+
+            //Temporário, apenas para caso de debug
+            aggregateLines.add("\n- - - - - - - - - - - - - - | NOME DO ARQUIVO: " + scannedFile.getName() + " | - - - - - - - - - - - - - -\n");
+
             for (String scannedLine : fileController.readContentFileAsList(scannedFile)){
                 aggregateLines.add(scannedLine);
             }

@@ -9,12 +9,12 @@ public class ContentExtractorController {
 
     private ContentExtractorService contentExtractorService;
 
-    public ContentExtractorController(ContentExtractorServiceImpl contentExtractorService) {
-        this.contentExtractorService = contentExtractorService;
+    public ContentExtractorController() {
+        this.contentExtractorService = new ContentExtractorServiceImpl();
     }
 
-    public List<String> extractRows() {
-        return this.contentExtractorService.extractRows();
+    public List<String> extractRows(String linkHttpRepo) {
+        return this.contentExtractorService.extractRows(linkHttpRepo);
     }
 
 }
