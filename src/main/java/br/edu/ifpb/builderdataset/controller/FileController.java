@@ -4,7 +4,7 @@ import br.edu.ifpb.builderdataset.abstraction.FileService;
 import br.edu.ifpb.builderdataset.service.FileServiceImpl;
 
 import java.io.File;
-import java.util.List;
+import java.util.Set;
 
 public class FileController {
 
@@ -22,12 +22,16 @@ public class FileController {
         return this.fileService.readContentFile(file);
     }
 
-    public List<String> readContentFileAsList(File file) {
+    public Set<String> readContentFileAsList(File file) {
         return this.fileService.readContentFileAsList(file);
     }
 
     public void deleteDir(File dir) {
         this.fileService.deleteDir(dir);
+    }
+
+    public void writeContentFile(File file, String text) {
+        fileService.writeContentFile(file, text);
     }
 
 }

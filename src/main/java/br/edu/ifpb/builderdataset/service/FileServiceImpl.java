@@ -7,9 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FileServiceImpl implements FileService {
@@ -24,7 +23,9 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     public File[] getFiles(File dir) {
+
         Vector enc = new Vector();
+
         File[] files = dir.listFiles();
         for (File f : files) {
             if (f.isDirectory() && !f.isHidden()) {
@@ -42,9 +43,11 @@ public class FileServiceImpl implements FileService {
         }
         //Transforma um Vector em um File[]:
         File[] filesEncontrados = new File[enc.size()];
+
         for (int i = 0; i < enc.size(); i++) {
-            filesEncontrados[i] = (File)enc.elementAt(i);
+            filesEncontrados[i] = (File) enc.elementAt(i);
         }
+
         return filesEncontrados;
     }
 
@@ -52,7 +55,7 @@ public class FileServiceImpl implements FileService {
     public String readContentFile(File file) {
         Path path = Paths.get(file.toURI());
         try {
-//            String longText = formmaterString(Files.readAllLines(path).toString());
+            //String longText = formmaterString(Files.readAllLines(path).toString());
             String longText = Files.readAllLines(path).toString();
             return longText;
         } catch (IOException e) {
@@ -62,50 +65,63 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<String> readContentFileAsList(File file){
+    public Set<String> readContentFileAsList(File file){
 
-        List<String> retorno = new ArrayList<>();
-        String nameFile = file.getName();
+        Set<String> retorno = new HashSet<>();
 
-        if(!nameFile.endsWith("jar") && !nameFile.endsWith("png")
-                && !nameFile.endsWith("jpeg") && !nameFile.endsWith("gz")
-                && !nameFile.endsWith("gif") && !nameFile.endsWith("tiff")
-                && !nameFile.endsWith("bmp") && !nameFile.endsWith("psd")
-                && !nameFile.endsWith("exif") && !nameFile.endsWith("zip")
-                && !nameFile.endsWith("rar") && !nameFile.endsWith("tar")
-                && !nameFile.endsWith("z") && !nameFile.endsWith("taz")
-                && !nameFile.endsWith("tgz") && !nameFile.endsWith("arj")
-                && !nameFile.endsWith("woff2") && !nameFile.endsWith("woff")) {
+        BufferedReader conteudoFile = null;
+        String linha = "";
+        String formmatedLine = "";
+        int countReadLine = 0;
+        int tamMinLine = 3;
 
-            BufferedReader conteudoFile = null;
-            String linha = "";
-
-            try {
-                conteudoFile = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
-                final int qntMinCaracter = 5; //definida aleatorialmente, mas precisamente
-                while ((linha = conteudoFile.readLine()) != null && !"".equalsIgnoreCase(linha) && (linha.length() > qntMinCaracter)) {
-//                    retorno.add(formmaterString(linha));
-                    retorno.add(linha);
+        try {
+            conteudoFile = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+            while ((linha = conteudoFile.readLine()) != null) {
+                ++countReadLine;
+                formmatedLine = linha.trim();
+                if (formmatedLine.length() > tamMinLine) {
+                    retorno.add(formmatedLine);
                 }
-                return retorno;
+            }
 
-            } catch (FileNotFoundException e) {
-                log.warning("Arquivo não encontrado: \n" + e.getMessage());
-                return retorno;
-            } catch (IOException e) {
-                log.warning("IO erro: \n" + e.getMessage());
-                return retorno;
-            } finally {
-                if (conteudoFile != null){
-                    try {
-                        conteudoFile.close();
-                    } catch (IOException e) {
-                        log.warning("IO erro: \n" + e.getMessage());
-                    }
+            log.log(Level.INFO, "Linhas lidas: " + countReadLine);
+
+            return retorno;
+        } catch (FileNotFoundException e) {
+            log.warning("Arquivo não encontrado: \n" + e.getMessage());
+            return retorno;
+        } catch (IOException e) {
+            log.warning("IO erro: \n" + e.getMessage());
+            return retorno;
+        } finally {
+            if (conteudoFile != null){
+                try {
+                    conteudoFile.close();
+                } catch (IOException e) {
+                    log.warning("IO erro: \n" + e.getMessage());
                 }
             }
         }
-        return retorno;
+    }
+
+    private int accountFileLines(File file) {
+
+        final Logger log = Logger.getLogger("METHOD: countLinesFile(File file)");
+
+        LineNumberReader linhaLeitura = null;
+        try {
+            linhaLeitura = new LineNumberReader(new FileReader(file));
+        } catch (FileNotFoundException e) {
+            log.log(Level.WARNING, "Arquivo não encontrado!\n" + e.getMessage());
+        }
+        try {
+            linhaLeitura.skip(file.length());
+        } catch (IOException e) {
+            log.log(Level.WARNING, "Impossível pular linhas arquivo!\n" + e.getMessage());
+        }
+
+        return linhaLeitura.getLineNumber();
     }
 
 //    private String formmaterString(String s){
@@ -142,6 +158,7 @@ public class FileServiceImpl implements FileService {
         dir.delete();
     }
 
+    @Override
     public void writeContentFile(File file, String text) {
 
         BufferedWriter writer = null;

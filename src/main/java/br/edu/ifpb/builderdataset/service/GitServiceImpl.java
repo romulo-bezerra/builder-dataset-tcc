@@ -23,8 +23,10 @@ public class GitServiceImpl implements GitService {
     @Override
     public File doClone(String linkHttpRepo) {
 
+        //authenticate
         CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(user, password);
 
+        //storage path
         File file = new File("src/main/resources/temp-repositories");
 
         try {

@@ -1,13 +1,14 @@
 package br.edu.ifpb.builderdataset.abstraction;
 
 import java.io.File;
-import java.util.List;
+import java.util.Set;
 
 public interface FileService {
 
     File[] getFiles(File dir);
     String readContentFile(File file);
-    List<String> readContentFileAsList(File file);
+    Set<String> readContentFileAsList(File file);
     void deleteDir(File dir);
+    void writeContentFile(File file, String text);
 
 }
